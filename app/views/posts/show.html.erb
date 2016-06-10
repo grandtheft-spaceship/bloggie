@@ -2,6 +2,9 @@
 <p class="body"><%= @post.body %></p>
 <p class="date">Submitted <%= time_ago_in_words(@post.created_at) %> Ago</p>
 
-<%= link_to 'Edit', edit_post_path(@post) %>
+<% if current_user && current_user == @post.user %>
+  <%= link_to 'Edit', edit_post_path(@post) %>
+<% end %>
+
 <%= link_to 'Back', root_path %>
 <%= link_to 'Delete', post_path(@post), method: :delete, data: {confirm: 'Are you sure?'} %>

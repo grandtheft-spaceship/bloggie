@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update]
   before_action :find_post, except: [:index, :new, :create]
+
   def index
     @posts = Post.order("created_at DESC")
   end
@@ -19,9 +20,16 @@ class PostsController < ApplicationController
   end
 
   def edit
+    if @post.user != current_user
+      return render text: 'Not Allowed', status: :forbidden
+    end
   end
 
   def update
+    if @post.user != current_user
+      return render text: 'Not Allowed', status: :forbidden
+    end
+    
     @post.update_attributes(post_params)
 
     redirect_to root_path
@@ -42,4 +50,5 @@ class PostsController < ApplicationController
   def find_post
     @post = Post.find(params[:id])
   end
+
 end
