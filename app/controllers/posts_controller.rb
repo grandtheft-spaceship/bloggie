@@ -29,13 +29,17 @@ class PostsController < ApplicationController
     if @post.user != current_user
       return render text: 'Not Allowed', status: :forbidden
     end
-    
+
     @post.update_attributes(post_params)
 
     redirect_to root_path
   end
 
   def destroy
+    if @post.user != current_user
+      flash[:error] = "Not Allowed"
+    end
+
     @post.destroy
 
     redirect_to root_path
